@@ -379,6 +379,10 @@
           "type": "integer",
           "description": "The ID of this work. If it has not been persisted to the database yet, this will not have a value"
         },
+        "type": {
+          "type": "string",
+          "description": "The work type of this work. This differentiates audio CD works from artbook works and so on."
+        },
         "title": {
           "type": "string",
           "description": "The name of the work"
