@@ -1,0 +1,572 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Medea API",
+    "description": "Media service",
+    "version": "0.0.1"
+  },
+  "basePath": "/api/v1",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "parameters": {
+    "creatorId": {
+      "name": "creatorId",
+      "in": "path",
+      "description": "The ID of a creator",
+      "type": "integer",
+      "required": true
+    },
+    "workId": {
+      "name": "workId",
+      "in": "path",
+      "description": "The ID of a work",
+      "type": "integer",
+      "required": true
+    },
+    "tagId": {
+      "name": "tagId",
+      "in": "path",
+      "description": "The ID of a tag",
+      "type": "integer",
+      "required": true
+    }
+  },
+  "paths": {
+    "/creators": {
+      "post": {
+        "description": "Create a new creator object",
+        "parameters": [
+          {
+            "name": "creator",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Creator"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Creator object successfully created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "creator": {
+                  "$ref": "#/definitions/Creator"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/creators/{creatorId}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/creatorId"
+        }
+      ],
+      "get": {
+        "description": "Get a creator by their ID",
+        "responses": {
+          "200": {
+            "description": "The creator object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "creator": {
+                  "$ref": "#/definitions/Creator"
+                },
+                "relatedCreators": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Creator"
+                  }
+                },
+                "works": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Work"
+                  }
+                },
+                "workCreatorAssociations": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/WorkCreatorAssociation"
+                  }
+                },
+                "workParts": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/WorkPart"
+                  }
+                },
+                "workPartCreatorAssociations": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/WorkPartCreatorAssociation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a creator",
+        "parameters": [
+          {
+            "name": "creator",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Creator"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The updated creator object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "creator": {
+                  "$ref": "#/definitions/Creator"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete the creator",
+        "responses": {
+          "200": {
+            "description": "An empty object",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      }
+    },
+    "/works": {
+      "post": {
+        "description": "Create a new work object",
+        "parameters": [
+          {
+            "name": "work",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Work"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Work object successfully created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "work": {
+                  "$ref": "#/definitions/Work"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/works/{workId}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/workId"
+        }
+      ],
+      "get": {
+        "description": "Get a work by its ID",
+        "responses": {
+          "200": {
+            "description": "A work object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "work": {
+                  "$ref": "#/definitions/Work"
+                },
+                "workCreatorAssociations": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/WorkCreatorAssociation"
+                  }
+                },
+                "creators": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Creator"
+                  }
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Tag"
+                  }
+                },
+                "workParts": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/WorkPart"
+                  }
+                },
+                "workPartCreatorAssociations": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/WorkPartCreatorAssociation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update an existing work",
+        "parameters": [
+          {
+            "name": "work",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Work"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The updated work object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "creator": {
+                  "$ref": "#/definitions/Work"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete the work",
+        "responses": {
+          "200": {
+            "description": "An empty object",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      }
+    },
+    "/tags": {
+      "post": {
+        "description": "Create a new tag object",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Tag object successfully created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "work": {
+                  "$ref": "#/definitions/Tag"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tags/{tagId}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/tagId"
+        }
+      ],
+      "get": {
+        "description": "Get a tag by its ID",
+        "responses": {
+          "200": {
+            "description": "A tag object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tag": {
+                  "$ref": "#/definitions/Tag"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a tag",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The updated tag object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "creator": {
+                  "$ref": "#/definitions/Tag"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete the tag",
+        "responses": {
+          "200": {
+            "description": "An empty object",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Work": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The ID of this work. If it has not been persisted to the database yet, this will not have a value"
+        },
+        "title": {
+          "type": "string",
+          "description": "The name of the work"
+        },
+        "catalogNumber": {
+          "type": "string",
+          "description": "The catalog number this work was released under"
+        },
+        "releaseDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The date this work was released to the public"
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-form text description of this work by the uploader"
+        },
+        "workCreatorAssociations": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "The IDs of the creators associated with this work"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "The IDs of the tags associated with this work"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "True if this work is visible to the world. Assume this is true if it is not defined."
+        }
+      }
+    },
+    "WorkCreatorAssociation": {
+      "type": "object",
+      "required": [
+        "work",
+        "creator"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The ID of this work-creator association. If it has not been persisted to the database yet, this will not have a value"
+        },
+        "work": {
+          "type": "integer",
+          "description": "The ID of the work that this association is associated with"
+        },
+        "creator": {
+          "type": "integer",
+          "description": "The ID of the creator that this association is associated with"
+        },
+        "role": {
+          "type": "string",
+          "description": "The role that this creator played in the creation of this work"
+        }
+      }
+    },
+    "WorkPart": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The ID of this work part. If it has not been persisted to the database yet, this will not have a value"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of this work part. Examples include song track titles or manga chapter titles"
+        },
+        "majorNumber": {
+          "type": "integer",
+          "description": "The primary number to sort this work part by. Examples include CD disc number or manga chapter number"
+        },
+        "minorNumber": {
+          "type": "integer",
+          "description": "The secondary number to sort this work part by. Examples include CD track number or manga page number"
+        },
+        "length": {
+          "type": "integer",
+          "description": "The length of the work part in units that make sense for the associated work. For audio works, the number of seconds of the track. For manga, the number of pages."
+        },
+        "creators": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "The IDs of the creators associated with this work part"
+        }
+      }
+    },
+    "WorkPartCreatorAssociation": {
+      "type": "object",
+      "required": [
+        "workPart",
+        "creator"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The ID of this work-part-creator association. If it has not been persisted to the database yet, this will not have a value"
+        },
+        "workPart": {
+          "type": "integer",
+          "description": "The ID of the work part that this association is associated with"
+        },
+        "creator": {
+          "type": "integer",
+          "description": "The ID of the creator that this association is associated with"
+        },
+        "role": {
+          "type": "string",
+          "description": "The role that this creator played in the creation of this work part"
+        }
+      }
+    },
+    "Creator": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The ID of this creator. If it has not been persisted to the database yet, this will not have a value"
+        },
+        "name": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases that this creator is also known by"
+        },
+        "relatedCreators": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "The IDs of the creators associated with this creator"
+        },
+        "works": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "The IDs of the works associated with this creator"
+        },
+        "workParts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "The IDs of the work parts associated with this creator"
+        },
+        "isGroup": {
+          "type": "boolean",
+          "description": "True if this creator is a group. Assume this is false if it is not defined"
+        }
+      }
+    },
+    "Tag": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The ID of this tag. If it has not been persisted to the database yet, this will not have a value"
+        },
+        "value": {
+          "type": "string",
+          "description": "The actual value of the tag"
+        },
+        "description": {
+          "type": "string",
+          "description": "Long-form text description of this tag"
+        }
+      }
+    }
+  }
+}
