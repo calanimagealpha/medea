@@ -30,22 +30,18 @@ class WorkCreatorAssociation(Base):
     __tablename__ = 'work_creators'
 
     id = Column(Integer, primary_key=True)
-    
+
     work_id = Column('work_id', Integer, ForeignKey('work.id'))
-    work = relationship('Work',
-        backref='creators'
-    )
+    work = relationship('Work', backref='creators')
     creator_id = Column('creator_id', Integer, ForeignKey('creator.id'))
-    creator = relationship('Creator',
-        backref='works'
-    )
+    creator = relationship('Creator', backref='works')
     role = Column('role', String)
 
     def __init__(self, work=None, creator=None, role=None):
         self.work = work
         self.creator = creator
         self.role = role
-    
+
 class Work(Base):
     __tablename__ = 'work'
 
@@ -54,7 +50,8 @@ class Work(Base):
     catalog_number = Column('catalog_number', String)
     release_date = Column('release_date', DateTime)
     release_event = Column('release_event', String)
-    tags = relationship('Tag',
+    tags = relationship(
+        'Tag',
         secondary=creator_tags_association_table,
         backref='works'
     )
@@ -66,8 +63,8 @@ class Creator(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column('name', String)
-
-    related_creators_forward = relationship('Creator',
+    related_creators_forward = relationship(
+        'Creator',
         secondary=creator_related_creators_association_table,
         primaryjoin=id==creator_related_creators_association_table.c.left_creator_id,
         secondaryjoin=id==creator_related_creators_association_table.c.right_creator_id,
@@ -109,21 +106,20 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
     value = Column('value', String)
     description = Column('description', String)
-    
+
 class WorkPart(Base):
     __tablename__ = 'workpart'
 
     id = Column(Integer, primary_key=True)
 
     work_id = Column('work_id', Integer, ForeignKey('work.id'))
-    work = relationship('Work',
-        backref='parts'
-    )
-    creator_associations = relationship('Creator',
+    work = relationship('Work', backref='parts')
+    creator_associations = relationship(
+        'Creator',
         secondary=workpart_creators_association_table
     )
     major_number = Column('major_number', Integer)
     minor_number = Column('minor_number', Integer)
     title = Column('title', String)
     length = Column('length', Integer)
-    
+
