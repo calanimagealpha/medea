@@ -539,13 +539,6 @@
           },
           "description": "The IDs of the works associated with this creator"
         },
-        "workParts": {
-          "type": "array",
-          "items": {
-            "type": "integer"
-          },
-          "description": "The IDs of the work parts associated with this creator"
-        },
         "isGroup": {
           "type": "boolean",
           "description": "True if this creator is a group. Assume this is false if it is not defined"
