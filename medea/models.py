@@ -20,8 +20,6 @@ class Base:
         No validation is performed on the types expected of the attributes from the schema.
         """
 
-        # TODO: Serialization overrides
-
         cls_name = type(self).__name__
         definitions = schema.spec.spec_dict['definitions']
 
