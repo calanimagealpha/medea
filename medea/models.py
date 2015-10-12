@@ -1,15 +1,65 @@
-from sqlalchemy import (Column, Boolean, Integer, String,
-    DateTime, ForeignKey, Table)
+from functools import singledispatch
+
+from sqlalchemy import (Column, Boolean, Integer, String, DateTime, Enum, ForeignKey, Table)
+from sqlalchemy import or_
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import Comparator
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, backref
-
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.ext.hybrid import Comparator
 from sqlalchemy.orm.interfaces import PropComparator
-from sqlalchemy import or_
+from sqlalchemy.orm.properties import ColumnProperty
+from sqlalchemy.orm.properties import RelationshipProperty
 
-Base = declarative_base()
+from medea import schema
+
+class Base:
+    def to_dict(self):
+        """Convert the model instance to a dict based on the keys defined for the model in schema.
+        No validation is performed on the types expected of the attributes from the schema.
+        """
+
+        # TODO: Serialization overrides
+
+        cls_name = type(self).__name__
+        definitions = schema.spec.spec_dict['definitions']
+
+        if cls_name not in definitions:
+            raise ValueError('No corresponding spec definition for {}'.format(cls_name))
+
+        spec_to_model_keys = {
+            key: schema.spec_to_model_attribute(key)
+            for key
+            in definitions[cls_name]['properties'].keys()
+        }
+
+        result = {}
+        for spec_key, model_key in spec_to_model_keys.items():
+            # Do we have this attribute?
+            if not hasattr(self, model_key):
+                raise ValueError('Spec defines property {} which is not present on the model'.format(model_key))
+
+            attr_val = getattr(self, model_key)
+
+            # None attributes = don't include
+            if attr_val:
+                result[spec_key] = prepare(attr_val)
+
+        return result
+
+Base = declarative_base(cls=Base)
+
+@singledispatch
+def prepare(val):
+    return val
+
+@prepare.register(Base)
+def prepare_orm(val):
+    return val.id
+
+@prepare.register(list)
+def prepare_orm_many(val):
+    return [item.id for item in val]
 
 creator_related_creators_association_table = Table('creator_related_creators', Base.metadata,
     Column('left_creator_id', Integer, ForeignKey('creator.id'), primary_key=True),
@@ -21,9 +71,9 @@ creator_tags_association_table = Table('creator_tags', Base.metadata,
     Column('tag_id', Integer, ForeignKey('tag.id'), primary_key=True),
 )
 
-workpart_creators_association_table = Table('workpart_creators', Base.metadata,
+workpart_work_creators_association_table = Table('workpart_work_creators', Base.metadata,
     Column('workpart_id', Integer, ForeignKey('workpart.id'), primary_key=True),
-    Column('creator_id', Integer, ForeignKey('creator.id'), primary_key=True)
+    Column('work_creator_association_id', Integer, ForeignKey('work_creators.id'), primary_key=True)
 )
 
 class WorkCreatorAssociation(Base):
@@ -47,16 +97,17 @@ class Work(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column('title', String)
+    type = Column('type', Enum('music', 'video', 'game', 'comic', 'artbook', 'photobook'))
     catalog_number = Column('catalog_number', String)
     release_date = Column('release_date', DateTime)
-    release_event = Column('release_event', String)
     tags = relationship(
         'Tag',
         secondary=creator_tags_association_table,
         backref='works'
     )
     description = Column('description', String)
-    is_group = Column('is_group', Boolean)
+    path = Column('path', String)
+    is_active = Column('is_active', Boolean)
 
 class Creator(Base):
     __tablename__ = 'creator'
@@ -72,6 +123,17 @@ class Creator(Base):
     )
     is_group = Column('is_group', Boolean)
 
+    class RelatedCreatorComparator(Comparator):
+        def __init__(self, *args):
+            self.underlying_associations = args
+
+        def operate(self, op, *args, **kwargs):
+            return or_(*[
+                op(association, *args, **kwargs)
+                for association
+                in self.underlying_associations
+            ])
+
     @hybrid_property
     def related_creators(self):
         return self.related_creators_forward + self.related_creators_back
@@ -82,22 +144,19 @@ class Creator(Base):
 
     @related_creators.comparator
     def related_creators(cls):
-        return RelatedCreatorComparator(
+        return Creator.RelatedCreatorComparator(
             cls.related_creators_forward,
             cls.related_creators_back,
         )
 
 
-class RelatedCreatorComparator(Comparator):
-    def __init__(self, *args):
-        self.underlying_associations = args
+class CreatorAlias(Base):
+    __tablename__ = 'creator_alias'
 
-    def operate(self, op, *args, **kwargs):
-        return or_(*[
-            op(association, *args, **kwargs)
-            for association
-            in self.underlying_associations
-        ])
+    id = Column(Integer, primary_key=True)
+    name = Column('name', String)
+    creator_id = Column('creator_id', Integer, ForeignKey('creator.id'))
+    creator = relationship('Creator', backref='aliases')
 
 
 class Tag(Base):
@@ -114,9 +173,9 @@ class WorkPart(Base):
 
     work_id = Column('work_id', Integer, ForeignKey('work.id'))
     work = relationship('Work', backref='parts')
-    creator_associations = relationship(
-        'Creator',
-        secondary=workpart_creators_association_table
+    work_creators_associations = relationship(
+        'WorkCreatorAssociation',
+        secondary=workpart_work_creators_association_table,
     )
     major_number = Column('major_number', Integer)
     minor_number = Column('minor_number', Integer)
