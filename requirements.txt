@@ -3,3 +3,5 @@ gunicorn==19.3.0
 PyMySQL==0.6.7
 SQLAlchemy==1.0.8
 alembic==0.8.2
+simplejson
+-e git://github.com/nattofriends/bravado-core.git#egg=bravado_core
