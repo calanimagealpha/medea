@@ -2,18 +2,19 @@ from functools import singledispatch
 
 from sqlalchemy import (Column, Boolean, Integer, String, DateTime, Enum, ForeignKey, Table)
 from sqlalchemy import or_
-from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import Comparator
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.orm.interfaces import PropComparator
-from sqlalchemy.orm.properties import ColumnProperty
-from sqlalchemy.orm.properties import RelationshipProperty
+from sqlalchemy.orm import relationship
 
 from medea import schema
 
 class Base:
+    """Provide common serialization help."""
+
+    # (attribute -> callable(value -> serialized value))
+    __serialization__ = {}
+
     def to_dict(self):
         """Convert the model instance to a dict based on the keys defined for the model in schema.
         No validation is performed on the types expected of the attributes from the schema.
@@ -43,7 +44,10 @@ class Base:
 
             # None attributes = don't include
             if attr_val:
-                result[spec_key] = prepare(attr_val)
+                if model_key in self.__serialization__:
+                    result[spec_key] = self.__serialization__[model_key](attr_val)
+                else:
+                    result[spec_key] = prepare(attr_val)
 
         return result
 
@@ -111,6 +115,10 @@ class Work(Base):
 
 class Creator(Base):
     __tablename__ = 'creator'
+
+    __serialization__ = {
+        'aliases': lambda creator_aliases: [alias.name for alias in creator_aliases],
+    }
 
     id = Column(Integer, primary_key=True)
     name = Column('name', String)
