@@ -55,6 +55,9 @@ class Response(response.OutgoingResponse):
         return self.text
 
 def validate_response_dict(path, response_dict, http_method='GET', status_code=200, headers=None):
+    if not headers:
+        headers = {}
+
     response = Response(response_dict, headers)
 
     # TODO: munge Flask routes to Swagger paths
