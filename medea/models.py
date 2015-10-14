@@ -11,7 +11,7 @@ creator_related_creators_association_table = Table('creator_related_creators', B
     Column('right_creator_id', Integer, ForeignKey('creator.id'), primary_key=True),
 )
 
-creator_tags_association_table = Table('creator_tags', Base.metadata,
+work_tags_association_table = Table('work_tags', Base.metadata,
     Column('work_id', Integer, ForeignKey('work.id'), primary_key=True),
     Column('tag_id', Integer, ForeignKey('tag.id'), primary_key=True),
 )
@@ -47,7 +47,7 @@ class Work(Base):
     release_date = Column('release_date', DateTime)
     tags = relationship(
         'Tag',
-        secondary=creator_tags_association_table,
+        secondary=work_tags_association_table,
         backref='works'
     )
     description = Column('description', String)
