@@ -108,12 +108,6 @@
                   "items": {
                     "$ref": "#/definitions/WorkPart"
                   }
-                },
-                "workPartRoles": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/WorkPartRole"
-                  }
                 }
               }
             }
@@ -226,12 +220,6 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/definitions/WorkPart"
-                  }
-                },
-                "workPartRoles": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/WorkPartRole"
                   }
                 }
               }
@@ -478,37 +466,12 @@
           "type": "integer",
           "description": "The length of the work part in units that make sense for the associated work. For audio works, the number of seconds of the track. For manga, the number of pages."
         },
-        "workPartRoles": {
+        "roles": {
           "type": "array",
           "items": {
             "type": "integer"
           },
-          "description": "The IDs of the work part roles associated with this work part"
-        }
-      }
-    },
-    "WorkPartRole": {
-      "type": "object",
-      "required": [
-        "workPart",
-        "creator"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "description": "The ID of this work part role. If it has not been persisted to the database yet, this will not have a value"
-        },
-        "workPart": {
-          "type": "integer",
-          "description": "The ID of the work part that this association is associated with"
-        },
-        "creator": {
-          "type": "integer",
-          "description": "The ID of the creator that this association is associated with"
-        },
-        "role": {
-          "type": "string",
-          "description": "The role that this creator played in the creation of this work part"
+          "description": "The IDs of the roles associated with this work part"
         }
       }
     },
@@ -539,12 +502,12 @@
           },
           "description": "The IDs of the creators associated with this creator"
         },
-        "works": {
+        "roles": {
           "type": "array",
           "items": {
             "type": "integer"
           },
-          "description": "The IDs of the works associated with this creator"
+          "description": "The IDs of the roles associated with this creator"
         },
         "isGroup": {
           "type": "boolean",
