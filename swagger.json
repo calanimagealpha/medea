@@ -97,10 +97,10 @@
                     "$ref": "#/definitions/Work"
                   }
                 },
-                "workCreatorAssociations": {
+                "roles": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/WorkCreatorAssociation"
+                    "$ref": "#/definitions/Role"
                   }
                 },
                 "workParts": {
@@ -109,10 +109,10 @@
                     "$ref": "#/definitions/WorkPart"
                   }
                 },
-                "workPartCreatorAssociations": {
+                "workPartRoles": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/WorkPartCreatorAssociation"
+                    "$ref": "#/definitions/WorkPartRole"
                   }
                 }
               }
@@ -204,10 +204,10 @@
                 "work": {
                   "$ref": "#/definitions/Work"
                 },
-                "workCreatorAssociations": {
+                "roles": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/WorkCreatorAssociation"
+                    "$ref": "#/definitions/Role"
                   }
                 },
                 "creators": {
@@ -228,10 +228,10 @@
                     "$ref": "#/definitions/WorkPart"
                   }
                 },
-                "workPartCreatorAssociations": {
+                "workPartRoles": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/WorkPartCreatorAssociation"
+                    "$ref": "#/definitions/WorkPartRole"
                   }
                 }
               }
@@ -400,12 +400,19 @@
           "type": "string",
           "description": "Free-form text description of this work by the uploader"
         },
-        "workCreatorAssociations": {
+        "roles": {
           "type": "array",
           "items": {
             "type": "integer"
           },
-          "description": "The IDs of the creators associated with this work"
+          "description": "The IDs of the roles associated with this work"
+        },
+        "workParts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "The IDs of the workParts associated with this work"
         },
         "tags": {
           "type": "array",
@@ -420,7 +427,7 @@
         }
       }
     },
-    "WorkCreatorAssociation": {
+    "Role": {
       "type": "object",
       "required": [
         "work",
@@ -471,16 +478,16 @@
           "type": "integer",
           "description": "The length of the work part in units that make sense for the associated work. For audio works, the number of seconds of the track. For manga, the number of pages."
         },
-        "creators": {
+        "workPartRoles": {
           "type": "array",
           "items": {
             "type": "integer"
           },
-          "description": "The IDs of the creators associated with this work part"
+          "description": "The IDs of the work part roles associated with this work part"
         }
       }
     },
-    "WorkPartCreatorAssociation": {
+    "WorkPartRole": {
       "type": "object",
       "required": [
         "workPart",
@@ -489,7 +496,7 @@
       "properties": {
         "id": {
           "type": "integer",
-          "description": "The ID of this work-part-creator association. If it has not been persisted to the database yet, this will not have a value"
+          "description": "The ID of this work part role. If it has not been persisted to the database yet, this will not have a value"
         },
         "workPart": {
           "type": "integer",
