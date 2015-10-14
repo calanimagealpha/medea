@@ -63,6 +63,7 @@ def prepare_orm(val):
 def prepare_orm_many(val):
     return [item.id for item in val]
 
+
 creator_related_creators_association_table = Table('creator_related_creators', Base.metadata,
     Column('left_creator_id', Integer, ForeignKey('creator.id'), primary_key=True),
     Column('right_creator_id', Integer, ForeignKey('creator.id'), primary_key=True),
@@ -73,18 +74,18 @@ creator_tags_association_table = Table('creator_tags', Base.metadata,
     Column('tag_id', Integer, ForeignKey('tag.id'), primary_key=True),
 )
 
-workpart_work_creators_association_table = Table('workpart_work_creators', Base.metadata,
+workpart_roles_association_table = Table('workpart_roles', Base.metadata,
     Column('workpart_id', Integer, ForeignKey('workpart.id'), primary_key=True),
-    Column('work_creator_association_id', Integer, ForeignKey('work_creators.id'), primary_key=True)
+    Column('role_id', Integer, ForeignKey('role.id'), primary_key=True)
 )
 
-class WorkCreatorAssociation(Base):
-    __tablename__ = 'work_creators'
+class Role(Base):
+    __tablename__ = 'role'
 
     id = Column(Integer, primary_key=True)
 
     work_id = Column('work_id', Integer, ForeignKey('work.id'))
-    work = relationship('Work', backref='creators')
+    work = relationship('Work', backref='roles')
     creator_id = Column('creator_id', Integer, ForeignKey('creator.id'))
     creator = relationship('Creator', backref='works')
     role = Column('role', String)
@@ -179,9 +180,9 @@ class WorkPart(Base):
 
     work_id = Column('work_id', Integer, ForeignKey('work.id'))
     work = relationship('Work', backref='parts')
-    work_creators_associations = relationship(
-        'WorkCreatorAssociation',
-        secondary=workpart_work_creators_association_table,
+    roles = relationship(
+        'Role',
+        secondary=workpart_roles_association_table,
     )
     major_number = Column('major_number', Integer)
     minor_number = Column('minor_number', Integer)

@@ -3,13 +3,15 @@ from medea.db_operations import session_scope
 
 from sqlalchemy import create_engine
 
+from medea.models import Work, Creator, Tag, WorkPart, Role
+from medea.db_operations import session_scope
 
 
 def test_poop(use_test_db):
     with session_scope() as poop_session:
         poop_work = models.Work(title='poop')
         poop_creator_1 = models.Creator(name='creapoop1')
-        poop_work_creator_ass = models.WorkCreatorAssociation(
+        poop_work_creator_ass = models.Role(
              poop_work,
              poop_creator_1,
              'rectum',
