@@ -57,3 +57,20 @@ def prepare_orm(val):
 @prepare.register(list)
 def prepare_orm_many(val):
     return [item.id for item in val]
+
+def api_to_model_dict(api_dict):
+    """Converts a dict with keys defined in the schema to a dict with keys matching
+    the model columns"""
+    model_name = list(api_dict.keys())[0]
+    api_data = list(api_dict.values())[0]
+    definitions = schema.spec.spec_dict['definitions']
+    spec_to_model_keys = {
+        key: schema.spec_to_model_attribute(key)
+        for key
+        in definitions[model_name]['properties'].keys()
+    }
+    model_dict = {}
+    for spec_key, model_key in spec_to_model_keys.items():
+        if spec_key in api_data:
+            model_dict[model_key] = api_data[spec_key]
+    return model_dict
