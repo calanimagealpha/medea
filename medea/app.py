@@ -30,10 +30,10 @@ def works():
     model_data = api_to_model_dict(request_data)
     if request.method == 'POST':
         response = logic.create_work(model_data)
-        return jsonify({})
+        return jsonify(response)
     elif request.method == 'PUT':
         response = logic.update_work(model_data)
-        return jsonify({})
+        return jsonify(response)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
