@@ -33,6 +33,7 @@ class TestWorks(TestAPIBase):
     def test_add_works(self, use_test_db, test_client):
         response = test_client.post(
             '/api/v1/works',
+            headers={'Content-Type': 'application/json'},
             data=simplejson.dumps(self.mock_work_request_object),
         )
         self.assert_response_ok(response)

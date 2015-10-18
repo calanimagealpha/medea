@@ -56,27 +56,24 @@ def json_endpoint(func):
     return wrapped
 
 
-@app.route('/api/v1/works', methods=['POST', 'PUT'])
+@app.route('/api/v1/works', methods=['POST'])
 @json_endpoint
 def works():
     model_data = api_to_model_dict(request.get_json())
-
-    if request.method == 'POST':
-        response = logic.create_work(model_data)
-    elif request.method == 'PUT':
-        response = logic.update_work(model_data)
-
+    response = logic.create_work(model_data)
     return {'work': response}, 201
 
-@app.route('/api/v1/works/<int:work_id>')
+@app.route('/api/v1/works/<int:work_id>', methods=['DELETE', 'GET', 'PUT'])
 @json_endpoint
 def work(work_id):
-    work = None
-    with session_scope() as session:
-        work = session.query(models.Work).filter_by(id=work_id).scalar()
-        if work:
-            return {'work': work.to_dict()}
-
+    if request.method == 'GET':
+        work = None
+        with session_scope() as session:
+            work = session.query(models.Work).filter_by(id=work_id).scalar()
+            if work:
+                return {'work': work.to_dict()}
+    elif request.method == 'PUT':
+        response = logic.update_work(work_id, model_data)
     return {}, 404
 
 if __name__ == "__main__":

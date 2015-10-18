@@ -12,18 +12,17 @@ def create_work(work_dict):
         tags = work_dict.pop('tags', None)
         new_work = Work(**work_dict)
         session.add(new_work)
-        session.flush()
         if roles:
             _create_roles_for_work(session, roles, new_work)
         if tags:
             #TODO: Add tags
             pass
-        session.flush()
+        session.commit()
         return new_work.to_dict()
 
-def update_work(work_dict):
+def update_work(work_id, work_dict):
     work_dict = dict(work_dict)
-    work_id = work_dict.pop('id')
+    work_dict.pop('id', None)
     with session_scope() as session:
         work = session.query(Work).filter_by(id=work_id).first()
         if not work:
@@ -37,7 +36,7 @@ def update_work(work_dict):
             pass
         for field, value in work_dict.items():
             setattr(work, field, value)
-        session.flush()
+        session.commit()
         return work.to_dict()
 
 def _create_roles_for_work(session, roles, work):
