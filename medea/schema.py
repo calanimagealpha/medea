@@ -79,6 +79,10 @@ def validate_response_dict(rule, response_dict, http_method='GET', status_code=2
     op = spec.get_op_for_request(http_method, path)
     response_spec = get_response_spec(status_code, op)
 
+    # No schema defined? Nothing to validate.
+    if 'schema' not in response_spec:
+        return
+
     validate_schema_object(spec, response_spec['schema'], response_dict)
 
 class FlaskRequestProxy(IncomingRequest):
