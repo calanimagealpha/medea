@@ -3,6 +3,8 @@ from functools import partial
 
 import simplejson
 from bravado_core.spec import Spec
+from bravado_core.request import IncomingRequest
+from bravado_core.request import unmarshal_request
 from bravado_core.response import get_response_spec
 from bravado_core.response import OutgoingResponse
 from bravado_core.response import validate_response
@@ -18,6 +20,7 @@ __all__ = (
     'rule_to_path',
     'validate_model_dict',
     'validate_response_dict',
+    'wrapping_key_to_spec',
 )
 
 spec_dict = simplejson.load(open(SCHEMA_PATH))
@@ -42,6 +45,13 @@ rule_to_path = partial(
     r'/<(?:.*:)(.*)>(/?)',
     lambda s: r'/{{{0}}}{1}'.format(model_to_spec_attribute(s.group(1)), s.group(2)),
 )
+
+wrapping_key_to_spec = {
+    spec.lower(): spec
+    for spec
+    in spec.spec_dict['definitions'].keys()
+}
+
 
 def validate_model_dict(model_dict):
     raise NotImplementedError
@@ -70,3 +80,22 @@ def validate_response_dict(rule, response_dict, http_method='GET', status_code=2
     response_spec = get_response_spec(status_code, op)
 
     validate_schema_object(spec, response_spec['schema'], response_dict)
+
+class FlaskRequestProxy(IncomingRequest):
+    def __init__(self, request):
+        self.path = {
+            model_to_spec_attribute(key): value
+            for key, value
+            in request.view_args.items()
+        }
+        self.query = request.args
+        self.form = request.form
+        self.headers = request.headers
+
+        self.json = request.get_json
+
+def validate_request(request):
+    path = rule_to_path(request.url_rule.rule)
+    op = spec.get_op_for_request(request.method, path)
+    request = FlaskRequestProxy(request)
+    unmarshal_request(request, op)

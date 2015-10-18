@@ -9,6 +9,7 @@ from medea import logic
 from medea import models
 from medea.base import api_to_model_dict
 from medea.config import config
+from medea.schema import validate_request
 from medea.schema import validate_response_dict
 
 from medea.db_operations import Session
@@ -38,11 +39,14 @@ def json_endpoint(func):
     @wraps(func)
     def wrapped(*args, **kwargs):
         # TODO: Request validation
+        if config['validate_requests']:
+            validate_request(request)
+
         response = func(*args, **kwargs)
 
         # TODO: Pass correct response code in
-        if config['verify_responses']:
-            validate_response_dict(request.url_rule.rule, response)
+        if config['validate_responses']:
+            validate_response_dict(request.url_rule.rule, response, http_method=request.method)
 
         if isinstance(response, tuple):
             response_body, status_code = response

@@ -64,17 +64,21 @@ def prepare_orm(val):
 def prepare_orm_many(val):
     return [item.id for item in val]
 
+
 def api_to_model_dict(api_dict):
     """Converts a dict with keys defined in the schema to a dict with keys matching
     the model columns"""
-    model_name = list(api_dict.keys())[0]
-    api_data = list(api_dict.values())[0]
+    wrapping_key, = api_dict.keys()
+    spec_name = schema.wrapping_key_to_spec[wrapping_key]
+    api_data = api_dict[wrapping_key]
     definitions = schema.spec.spec_dict['definitions']
+
     spec_to_model_keys = {
         key: schema.spec_to_model_attribute(key)
         for key
-        in definitions[model_name]['properties'].keys()
+        in definitions[spec_name]['properties'].keys()
     }
+
     model_dict = {}
     for spec_key, model_key in spec_to_model_keys.items():
         if spec_key in api_data:
