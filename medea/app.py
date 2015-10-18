@@ -66,7 +66,7 @@ def works():
     elif request.method == 'PUT':
         response = logic.update_work(model_data)
 
-    return response
+    return {'work': response}
 
 @app.route('/api/v1/works/<int:work_id>')
 @json_endpoint
@@ -75,7 +75,7 @@ def work(work_id):
     with session_scope() as session:
         work = session.query(models.Work).filter_by(id=work_id).scalar()
         if work:
-            return {'works': work.to_dict()}
+            return {'work': work.to_dict()}
 
     return {}, 404
 
