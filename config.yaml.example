@@ -2,4 +2,4 @@ port: 5001
 database: sqlite:///medea.db
 debug: true
 
-verify_responses: false
+validate_responses: false
