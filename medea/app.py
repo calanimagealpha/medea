@@ -72,13 +72,26 @@ def work(work_id):
             work = session.query(models.Work).filter_by(id=work_id).scalar()
             if work:
                 return {'work': work.to_dict()}
+
     elif request.method == 'PUT':
+        model_data = api_to_model_dict(request.get_json())
         response = logic.update_work(work_id, model_data)
+        return {'work': response}
+
+    elif request.method == 'DELETE':
+        with session_scope() as session:
+            work = session.query(models.Work).filter_by(id=work_id).scalar()
+            if work:
+                session.delete(work)
+                return {}
+
     return {}, 404
+
 
 if __name__ == "__main__":
     # TODO: remove
-    engine = create_engine('sqlite:///medea.db')
+    engine = create_engine(config['database'])
     Session.configure(bind=engine)
+
 
     app.run(host='0.0.0.0')
