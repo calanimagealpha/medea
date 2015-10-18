@@ -50,7 +50,7 @@ def _create_roles_for_work(session, roles, work):
                 continue
             creator = session.query(Creator).filter_by(id=creator_id).first()
             if creator:
-                new_role = Role(work=work, creator=creator, role=role) 
+                new_role = Role(work=work, creator=creator, role=role)
 
 def _get_role_from_role_and_ids(session, role, creator_id, work_id):
     role_result = session.query(Role).filter_by(
