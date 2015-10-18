@@ -82,6 +82,9 @@
       "get": {
         "description": "Get a creator by their ID",
         "responses": {
+          "404": {
+            "description": "Creator not found"
+          },
           "200": {
             "description": "The creator object",
             "schema": {
@@ -135,6 +138,9 @@
           }
         ],
         "responses": {
+          "404": {
+            "description": "Creator not found"
+          },
           "200": {
             "description": "The updated creator object",
             "schema": {
@@ -151,6 +157,9 @@
       "delete": {
         "description": "Delete the creator",
         "responses": {
+          "404": {
+            "description": "Creator not found"
+          },
           "200": {
             "description": "An empty object",
             "schema": {
@@ -203,6 +212,9 @@
       "get": {
         "description": "Get a work by its ID",
         "responses": {
+          "404": {
+            "description": "Work not found"
+          },
           "200": {
             "description": "A work object",
             "schema": {
@@ -256,6 +268,9 @@
           }
         ],
         "responses": {
+          "404": {
+            "description": "Work not found"
+          },
           "200": {
             "description": "The updated work object",
             "schema": {
@@ -272,6 +287,9 @@
       "delete": {
         "description": "Delete the work",
         "responses": {
+          "404": {
+            "description": "Work not found"
+          },
           "200": {
             "description": "An empty object",
             "schema": {
@@ -324,6 +342,9 @@
       "get": {
         "description": "Get a tag by its ID",
         "responses": {
+          "404": {
+            "description": "Tag not found"
+          },
           "200": {
             "description": "A tag object",
             "schema": {
@@ -353,6 +374,9 @@
           }
         ],
         "responses": {
+          "404": {
+            "description": "Tag not found"
+          },
           "200": {
             "description": "The updated tag object",
             "schema": {
@@ -369,6 +393,9 @@
       "delete": {
         "description": "Delete the tag",
         "responses": {
+          "404": {
+            "description": "Tag not found"
+          },
           "200": {
             "description": "An empty object",
             "schema": {
