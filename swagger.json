@@ -49,7 +49,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Creator"
+              "type": "object",
+              "properties": {
+                "creator": {
+                    "$ref": "#/definitions/Creator"
+                }
+              }
             }
           }
         ],
@@ -165,7 +170,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Work"
+              "type": "object",
+              "properties": {
+                 "work": {
+                    "$ref": "#/definitions/Work"
+                 }
+              }
             }
           }
         ],
@@ -281,7 +291,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Tag"
+              "type": "object",
+              "properties": {
+                "tag": {
+                    "$ref": "#/definitions/Tag"
+                }
+              }
             }
           }
         ],
@@ -291,7 +306,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "work": {
+                "tag": {
                   "$ref": "#/definitions/Tag"
                 }
               }
