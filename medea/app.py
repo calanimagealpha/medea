@@ -44,15 +44,15 @@ def json_endpoint(func):
 
         response = func(*args, **kwargs)
 
-        # TODO: Pass correct response code in
-        if config['validate_responses']:
-            validate_response_dict(request.url_rule.rule, response, http_method=request.method)
-
         if isinstance(response, tuple):
             response_body, status_code = response
-            return jsonify(response_body), status_code
+        else:
+            response_body, status_code = response, 200
 
-        return jsonify(response)
+        if config['validate_responses']:
+            validate_response_dict(request.url_rule.rule, response_body, http_method=request.method, status_code=status_code)
+
+        return jsonify(response_body), status_code
     return wrapped
 
 
@@ -66,7 +66,7 @@ def works():
     elif request.method == 'PUT':
         response = logic.update_work(model_data)
 
-    return {'work': response}
+    return {'work': response}, 201
 
 @app.route('/api/v1/works/<int:work_id>')
 @json_endpoint
