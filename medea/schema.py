@@ -3,7 +3,10 @@ from functools import partial
 
 import simplejson
 from bravado_core.spec import Spec
-from bravado_core import response
+from bravado_core.response import get_response_spec
+from bravado_core.response import OutgoingResponse
+from bravado_core.response import validate_response
+from bravado_core.validate import validate_schema_object
 
 # TODO: How to locate this file in the right way?
 SCHEMA_PATH = 'swagger.json'
@@ -43,7 +46,7 @@ rule_to_path = partial(
 def validate_model_dict(model_dict):
     raise NotImplementedError
 
-class Response(response.OutgoingResponse):
+class Response(OutgoingResponse):
     content_type = 'application/json'
 
     def __init__(self, response_dict, headers):
@@ -54,14 +57,16 @@ class Response(response.OutgoingResponse):
         # TODO: Does validate_schema_object work okay with dicts?
         return self.text
 
-def validate_response_dict(path, response_dict, http_method='GET', status_code=200, headers=None):
+def validate_response_dict(rule, response_dict, http_method='GET', status_code=200, headers=None):
+    path = rule_to_path(rule)
+
     if not headers:
         headers = {}
 
-    response = Response(response_dict, headers)
+    # TODO: Validate the entire response, including headers
+    # response = Response(response_dict, headers)
 
-    # TODO: munge Flask routes to Swagger paths
     op = spec.get_op_for_request(http_method, path)
-    response_spec = response.get_response_spec(status_code, op)
+    response_spec = get_response_spec(status_code, op)
 
-    response.validate_response(response_spec, op, response)
+    validate_schema_object(spec, response_spec['schema'], response_dict)

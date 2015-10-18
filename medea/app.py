@@ -8,13 +8,14 @@ from werkzeug.exceptions import default_exceptions, HTTPException
 from medea import logic
 from medea import models
 from medea.base import api_to_model_dict
-from medea.schema import rule_to_path
+from medea.config import config
+from medea.schema import validate_response_dict
 
 from medea.db_operations import Session
 from medea.db_operations import session_scope
 from sqlalchemy import create_engine
 
-__all__ = ['json_app']
+__all__ = ['medea_app']
 
 def medea_app(import_name, **kwargs):
     def make_json_error(ex):
@@ -36,13 +37,16 @@ app = medea_app(__name__)
 def json_endpoint(func):
     @wraps(func)
     def wrapped(*args, **kwargs):
-        # swagger_path = rule_to_path(request.url_rule.rule)
         # TODO: Request validation
         response = func(*args, **kwargs)
-        # TODO: Response validation
+
+        # TODO: Pass correct response code in
+        if config['verify_responses']:
+            validate_response_dict(request.url_rule.rule, response)
 
         if isinstance(response, tuple):
-            return response
+            response_body, status_code = response
+            return jsonify(response_body), status_code
 
         return jsonify(response)
     return wrapped
@@ -51,26 +55,23 @@ def json_endpoint(func):
 @app.route('/api/v1/works', methods=['POST', 'PUT'])
 @json_endpoint
 def works():
-    request_data = request.get_json()
-    print(request_data)
-    model_data = api_to_model_dict(request_data)
+    model_data = api_to_model_dict(request.get_json())
+
     if request.method == 'POST':
         response = logic.create_work(model_data)
-        return response
     elif request.method == 'PUT':
         response = logic.update_work(model_data)
-        return response
+
+    return response
 
 @app.route('/api/v1/works/<int:work_id>')
 @json_endpoint
 def work(work_id):
-
     work = None
     with session_scope() as session:
         work = session.query(models.Work).filter_by(id=work_id).scalar()
-
-    if work:
-        return {'work': work.to_dict()}
+        if work:
+            return {'works': work.to_dict()}
 
     return {}, 404
 

@@ -66,8 +66,8 @@ class Creator(Base):
     related_creators_forward = relationship(
         'Creator',
         secondary=creator_related_creators_association_table,
-        primaryjoin=id==creator_related_creators_association_table.c.left_creator_id,
-        secondaryjoin=id==creator_related_creators_association_table.c.right_creator_id,
+        primaryjoin=(id == creator_related_creators_association_table.c.left_creator_id),
+        secondaryjoin=(id == creator_related_creators_association_table.c.right_creator_id),
         backref='related_creators_back'
     )
     is_group = Column('is_group', Boolean)

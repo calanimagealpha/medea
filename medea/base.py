@@ -7,7 +7,7 @@ from medea import schema
 class Base:
     """Provide common serialization help."""
 
-    # (attribute -> callable(value -> serialized value))
+    # (spec property -> callable(value -> serialized value))
     __serialization__ = {}
 
     def to_dict(self):
@@ -31,14 +31,20 @@ class Base:
         for spec_key, model_key in spec_to_model_keys.items():
             # Do we have this attribute?
             if not hasattr(self, model_key):
-                raise ValueError('Spec defines property {} which is not present on the model'.format(model_key))
+                # First stop: completely synthetic serialization
+                # These are called with no argument
+                if spec_key in self.__serialization__:
+                    result[spec_key] = self.__serialization__[spec_key]()
+                    continue
+                else:
+                    raise ValueError('Spec defines property {} which is not present on the model'.format(model_key))
 
             attr_val = getattr(self, model_key)
 
             # None attributes = don't include
             if attr_val:
                 if model_key in self.__serialization__:
-                    result[spec_key] = self.__serialization__[model_key](attr_val)
+                    result[spec_key] = self.__serialization__[spec_key](attr_val)
                 else:
                     result[spec_key] = prepare(attr_val)
 
