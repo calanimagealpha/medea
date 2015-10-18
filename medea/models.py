@@ -1,4 +1,4 @@
-from sqlalchemy import (Column, Boolean, Integer, String, DateTime, Enum, ForeignKey, Table)
+from sqlalchemy import (Column, Boolean, Integer, String, DateTime, ForeignKey, Table)
 from sqlalchemy import or_
 from sqlalchemy.ext.hybrid import Comparator
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -42,7 +42,7 @@ class Work(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column('title', String)
-    type = Column('type', Enum('music', 'video', 'game', 'comic', 'artbook', 'photobook'))
+    type = Column('type', String)
     catalog_number = Column('catalog_number', String)
     release_date = Column('release_date', DateTime)
     tags = relationship(
