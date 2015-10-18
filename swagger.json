@@ -81,6 +81,9 @@
             "description": "The creator object",
             "schema": {
               "type": "object",
+              "required": [
+                  "creator"
+              ],
               "properties": {
                 "creator": {
                   "$ref": "#/definitions/Creator"
@@ -194,6 +197,9 @@
             "description": "A work object",
             "schema": {
               "type": "object",
+              "required": [
+                  "work"
+              ],
               "properties": {
                 "work": {
                   "$ref": "#/definitions/Work"
@@ -307,6 +313,9 @@
             "description": "A tag object",
             "schema": {
               "type": "object",
+              "required": [
+                  "tag"
+              ],
               "properties": {
                 "tag": {
                   "$ref": "#/definitions/Tag"
