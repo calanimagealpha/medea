@@ -19,6 +19,15 @@ operations = [
 
 
 @pytest.mark.parametrize(
+    "resource",
+    resources,
+    ids=[resource.name for resource in resources],
+)
+def test_resource_implements_operations(resource):
+    assert set(HTTP_METHODS_TO_EXPECTED_RESPONSES.keys()) \
+        == set([op.http_method for op in resource.operations.values()])
+
+@pytest.mark.parametrize(
     "operation",
     operations,
     ids=["{} {}".format(op.http_method.upper(), op.path_name) for op in operations]
