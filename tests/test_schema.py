@@ -1,3 +1,9 @@
+"""Test various semantic properties of the schema. If the
+resource/operation/parameter/response being tested is in progress,
+simply treat any fails as advisory. Otherwise implicit contracts regarding
+the schema may be violated.
+"""
+
 import pytest
 
 from medea.schema import spec
