@@ -63,6 +63,9 @@
             "description": "Creator object successfully created",
             "schema": {
               "type": "object",
+              "required": [
+                "creator"
+              ],
               "properties": {
                 "creator": {
                   "$ref": "#/definitions/Creator"
@@ -82,12 +85,15 @@
       "get": {
         "description": "Get a creator by their ID",
         "responses": {
+          "404": {
+            "description": "Creator not found"
+          },
           "200": {
             "description": "The creator object",
             "schema": {
               "type": "object",
               "required": [
-                  "creator"
+                "creator"
               ],
               "properties": {
                 "creator": {
@@ -135,10 +141,16 @@
           }
         ],
         "responses": {
+          "404": {
+            "description": "Creator not found"
+          },
           "200": {
             "description": "The updated creator object",
             "schema": {
               "type": "object",
+              "required": [
+                "creator"
+              ],
               "properties": {
                 "creator": {
                   "$ref": "#/definitions/Creator"
@@ -151,6 +163,9 @@
       "delete": {
         "description": "Delete the creator",
         "responses": {
+          "404": {
+            "description": "Creator not found"
+          },
           "200": {
             "description": "An empty object",
             "schema": {
@@ -184,6 +199,9 @@
             "description": "Work object successfully created",
             "schema": {
               "type": "object",
+              "required": [
+                "work"
+              ],
               "properties": {
                 "work": {
                   "$ref": "#/definitions/Work"
@@ -203,12 +221,15 @@
       "get": {
         "description": "Get a work by its ID",
         "responses": {
+          "404": {
+            "description": "Work not found"
+          },
           "200": {
             "description": "A work object",
             "schema": {
               "type": "object",
               "required": [
-                  "work"
+                "work"
               ],
               "properties": {
                 "work": {
@@ -256,12 +277,18 @@
           }
         ],
         "responses": {
+          "404": {
+            "description": "Work not found"
+          },
           "200": {
             "description": "The updated work object",
             "schema": {
               "type": "object",
+              "required": [
+                 "work"
+              ],
               "properties": {
-                "creator": {
+                "work": {
                   "$ref": "#/definitions/Work"
                 }
               }
@@ -272,6 +299,9 @@
       "delete": {
         "description": "Delete the work",
         "responses": {
+          "404": {
+            "description": "Work not found"
+          },
           "200": {
             "description": "An empty object",
             "schema": {
@@ -305,6 +335,9 @@
             "description": "Tag object successfully created",
             "schema": {
               "type": "object",
+              "required": [
+                "tag"
+              ],
               "properties": {
                 "tag": {
                   "$ref": "#/definitions/Tag"
@@ -324,12 +357,15 @@
       "get": {
         "description": "Get a tag by its ID",
         "responses": {
+          "404": {
+            "description": "Tag not found"
+          },
           "200": {
             "description": "A tag object",
             "schema": {
               "type": "object",
               "required": [
-                  "tag"
+                "tag"
               ],
               "properties": {
                 "tag": {
@@ -353,12 +389,18 @@
           }
         ],
         "responses": {
+          "404": {
+            "description": "Tag not found"
+          },
           "200": {
             "description": "The updated tag object",
             "schema": {
               "type": "object",
+              "required": [
+                "tag"
+              ],
               "properties": {
-                "creator": {
+                "tag": {
                   "$ref": "#/definitions/Tag"
                 }
               }
@@ -369,6 +411,9 @@
       "delete": {
         "description": "Delete the tag",
         "responses": {
+          "404": {
+            "description": "Tag not found"
+          },
           "200": {
             "description": "An empty object",
             "schema": {
