@@ -105,7 +105,12 @@ class CreatorAlias(Base):
     id = Column(Integer, primary_key=True)
     name = Column('name', String)
     creator_id = Column('creator_id', Integer, ForeignKey('creator.id'))
-    creator = relationship('Creator', backref='aliases')
+    creator = relationship(
+        'Creator',
+        backref='aliases',
+        cascade='delete-orphan',
+        single_parent=True,
+    )
 
 
 class Tag(Base):

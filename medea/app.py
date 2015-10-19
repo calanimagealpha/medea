@@ -65,16 +65,47 @@ def works():
 
 @app.route('/api/v1/works/<int:work_id>', methods=['DELETE', 'GET', 'PUT'])
 @json_endpoint
-def work(work_id):
-    if request.method == 'GET':
-        work = None
-        with session_scope() as session:
-            work = session.query(models.Work).filter_by(id=work_id).scalar()
-            if work:
-                return {'work': work.to_dict()}
-    elif request.method == 'PUT':
-        response = logic.update_work(work_id, model_data)
-    return {}, 404
+def works_with_id(work_id):
+    response = {}
+    work = None
+    with session_scope() as session:
+        work = session.query(models.Work).filter_by(id=work_id).scalar()
+        if work:
+            if request.method == 'GET':
+                response = {'work': work.to_dict()}
+            elif request.method == 'DELETE':
+                session.query(models.Work).filter_by(id=work_id).delete()
+                response = {'status': 'Delete OK'}
+            elif request.method == 'PUT':
+                model_data = api_to_model_dict(request.get_json())
+                response = {'work': logic.update_work(work_id, model_data)}
+    return response or ({}, 404)
+
+@app.route('/api/v1/creators', methods=['POST'])
+@json_endpoint
+def creators():
+    model_data = api_to_model_dict(request.get_json())
+    response = logic.create_creator(model_data)
+    return {'creator': response}, 201
+
+@app.route('/api/v1/creators/<int:creator_id>', methods=['DELETE', 'GET', 'PUT'])
+@json_endpoint
+def creators_with_id(creator_id):
+    response = {}
+    creator = None
+    with session_scope() as session:
+        creator = session.query(models.Creator).filter_by(id=creator_id).scalar()
+        if creator:
+            if request.method == 'GET':
+                 response = {'creator': creator.to_dict()}
+            elif request.method == 'DELETE':
+                session.query(models.Creator).filter_by(id=creator_id).delete()
+                response = {'status': 'Delete OK'}
+            elif request.method == 'PUT':
+                model_data = api_to_model_dict(request.get_json())
+                response = {'creator': logic.update_creator(creator_id, model_data)}
+    return response or ({}, 404)
+
 
 if __name__ == "__main__":
     # TODO: remove

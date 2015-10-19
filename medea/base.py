@@ -10,7 +10,7 @@ class Base:
     # (spec property -> callable(value -> serialized value))
     __serialization__ = {}
 
-    def to_dict(self, as_model_dict=False):
+    def to_dict(self):
         """Convert the model instance to a dict based on the keys defined for the model in schema.
         No validation is performed on the types expected of the attributes from the schema.
         """
@@ -48,9 +48,6 @@ class Base:
                 else:
                     result[spec_key] = prepare(attr_val)
 
-        if as_model_dict:
-            result = api_to_model_dict({cls_name: result})
-
         return result
 
 Base = declarative_base(cls=Base)
@@ -72,7 +69,7 @@ def api_to_model_dict(api_dict):
     """Converts a dict with keys defined in the schema to a dict with keys matching
     the model columns"""
     wrapping_key, = api_dict.keys()
-    spec_name = schema.wrapping_key_to_spec[wrapping_key.lower()]
+    spec_name = schema.wrapping_key_to_spec[wrapping_key]
     api_data = api_dict[wrapping_key]
     definitions = schema.spec.spec_dict['definitions']
 

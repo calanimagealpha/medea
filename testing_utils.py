@@ -2,6 +2,7 @@ import datetime
 import random
 
 from medea import logic
+from medea.base import api_to_model_dict
 from medea.db_operations import session_scope
 from medea.models import Work, Creator, CreatorAlias, Tag, WorkPart, Role
 
@@ -32,7 +33,8 @@ def create_fake_work(
         new_fake_work = Work(**work_dict)
         session.add(new_fake_work)
         session.commit()
-        return new_fake_work.to_dict(as_model_dict=True)
+        work_dict = api_to_model_dict({'work': new_fake_work.to_dict()})
+        return work_dict
 
 def create_fake_creator(
     name=None,
@@ -50,4 +52,5 @@ def create_fake_creator(
             new_alias = CreatorAlias(name=alias_name, creator=new_fake_creator)
         session.add(new_fake_creator)
         session.commit()
-        return new_fake_creator.to_dict(as_model_dict=True)
+        creator_dict = api_to_model_dict({'creator': new_fake_creator.to_dict()})
+        return creator_dict
