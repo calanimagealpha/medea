@@ -68,8 +68,9 @@ def test_request_body_name_synchronization_required_and_declared_keys(resource, 
     # TODO: Use a real stemmer
     assert resource.name.rstrip('s') == param.name
 
-    assert param.required
     spec = get_param_type_spec(param)
+    assert 'required' in spec
+    assert param.name in spec['required']
     assert param.name in spec['properties'].keys()
 
 
@@ -93,7 +94,7 @@ def test_ok_response_required_and_declared_keys(resource, operation, response):
     """
     singular_resource = resource.name.rstrip('s')
 
-    print(singular_resource, operation.path_name, operation.http_method)
+    assert 'required' in response['schema']
     assert singular_resource in response['schema']['required']
     assert singular_resource in response['schema']['properties'].keys()
 

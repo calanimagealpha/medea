@@ -50,6 +50,9 @@
             "required": true,
             "schema": {
               "type": "object",
+              "required": [
+                "creator"
+              ],
               "properties": {
                 "creator": {
                     "$ref": "#/definitions/Creator"
@@ -136,7 +139,15 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Creator"
+              "type": "object",
+              "required": [
+                "creator"
+              ],
+              "properties": {
+                "creator": {
+                  "$ref": "#/definitions/Creator"
+                }
+              }
             }
           }
         ],
@@ -186,10 +197,13 @@
             "required": true,
             "schema": {
               "type": "object",
+              "required": [
+                "work"
+              ],
               "properties": {
-                 "work": {
-                    "$ref": "#/definitions/Work"
-                 }
+                "work": {
+                  "$ref": "#/definitions/Work"
+                }
               }
             }
           }
@@ -272,7 +286,15 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Work"
+              "type": "object",
+              "required": [
+                "work"
+              ],
+              "properties": {
+                "work": {
+                  "$ref": "#/definitions/Work"
+                }
+              }
             }
           }
         ],
@@ -322,6 +344,9 @@
             "required": true,
             "schema": {
               "type": "object",
+              "required": [
+                "tag"
+              ],
               "properties": {
                 "tag": {
                     "$ref": "#/definitions/Tag"
@@ -384,7 +409,15 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Tag"
+              "type": "object",
+              "required": [
+                "tag"
+              ],
+              "properties": {
+                "tag": {
+                  "$ref": "#/definitions/Tag"
+                }
+              }
             }
           }
         ],
