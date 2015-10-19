@@ -5,6 +5,7 @@ the schema may be violated.
 """
 
 import pytest
+from bravado_core.param import get_param_type_spec
 
 from medea.schema import spec
 
@@ -59,12 +60,18 @@ request_body_params = [
     request_body_params,
     ids=["{} param of {} {}".format(param.name, op.http_method.upper(), op.path_name) for (_, op, param) in request_body_params],
 )
-def test_request_body_name_synchronization(resource, operation, param):
-    """Check that each parameter transmitted in the body (nominally a wrapper key)
-    is similarly named to the resource it is declared for.
+def test_request_body_name_synchronization_required_and_declared_keys(resource, operation, param):
+    """Check that each parameter transmitted in the body
+    is similarly named to the resource it is declared for
+    and has a wrapper key marked as required and declared in properties
     """
     # TODO: Use a real stemmer
     assert resource.name.rstrip('s') == param.name
+
+    assert param.required
+    spec = get_param_type_spec(param)
+    assert param.name in spec['properties'].keys()
+
 
 success_responses = [
     (resource, operation, response_spec)

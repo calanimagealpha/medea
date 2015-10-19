@@ -18,7 +18,6 @@ class TestAPIBase(object):
             'type': 'comic',
             'title': 'pooop',
             'catalogNumber': '1234',
-            'releaseDate': None,
             'description': 'taser',
             'creators': [],
             'tags': [],
