@@ -3,6 +3,7 @@ import traceback
 
 from flask import Flask, request, jsonify
 from flask.ext.cors import CORS
+from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
 from werkzeug.exceptions import default_exceptions, HTTPException
 
 from medea import logic
@@ -40,7 +41,10 @@ def json_endpoint(func):
     def wrapped(*args, **kwargs):
         # TODO: Request validation
         if config['validate_requests']:
-            validate_request(request)
+            try:
+                validate_request(request)
+            except JsonSchemaValidationError as ex:
+                raise ValueError("Request did not validate: " + str(ex)) from None
 
         response = func(*args, **kwargs)
 
@@ -50,7 +54,11 @@ def json_endpoint(func):
             response_body, status_code = response, 200
 
         if config['validate_responses']:
-            validate_response_dict(request.url_rule.rule, response_body, http_method=request.method, status_code=status_code)
+            try:
+                validate_response_dict(request.url_rule.rule, response_body, http_method=request.method, status_code=status_code)
+            except JsonSchemaValidationError as ex:
+                raise ValueError("Response did not validate: " + str(ex)) from None
+
 
         return jsonify(response_body), status_code
     return wrapped

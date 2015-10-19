@@ -8,7 +8,9 @@ from medea.db_operations import session_scope
 
 @pytest.yield_fixture
 def test_client():
+    app.app.config['TESTING'] = True
     yield app.app.test_client()
+    app.app.config['TESTING'] = False
 
 
 class TestAPIBase(object):
