@@ -63,6 +63,9 @@
             "description": "Creator object successfully created",
             "schema": {
               "type": "object",
+              "required": [
+                "creator"
+              ],
               "properties": {
                 "creator": {
                   "$ref": "#/definitions/Creator"
@@ -90,7 +93,7 @@
             "schema": {
               "type": "object",
               "required": [
-                  "creator"
+                "creator"
               ],
               "properties": {
                 "creator": {
@@ -145,6 +148,9 @@
             "description": "The updated creator object",
             "schema": {
               "type": "object",
+              "required": [
+                "creator"
+              ],
               "properties": {
                 "creator": {
                   "$ref": "#/definitions/Creator"
@@ -193,6 +199,9 @@
             "description": "Work object successfully created",
             "schema": {
               "type": "object",
+              "required": [
+                "work"
+              ],
               "properties": {
                 "work": {
                   "$ref": "#/definitions/Work"
@@ -220,7 +229,7 @@
             "schema": {
               "type": "object",
               "required": [
-                  "work"
+                "work"
               ],
               "properties": {
                 "work": {
@@ -275,8 +284,11 @@
             "description": "The updated work object",
             "schema": {
               "type": "object",
+              "required": [
+                 "work"
+              ],
               "properties": {
-                "creator": {
+                "work": {
                   "$ref": "#/definitions/Work"
                 }
               }
@@ -323,6 +335,9 @@
             "description": "Tag object successfully created",
             "schema": {
               "type": "object",
+              "required": [
+                "tag"
+              ],
               "properties": {
                 "tag": {
                   "$ref": "#/definitions/Tag"
@@ -350,7 +365,7 @@
             "schema": {
               "type": "object",
               "required": [
-                  "tag"
+                "tag"
               ],
               "properties": {
                 "tag": {
@@ -381,8 +396,11 @@
             "description": "The updated tag object",
             "schema": {
               "type": "object",
+              "required": [
+                "tag"
+              ],
               "properties": {
-                "creator": {
+                "tag": {
                   "$ref": "#/definitions/Tag"
                 }
               }
