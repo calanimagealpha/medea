@@ -2,16 +2,13 @@ import datetime
 import pytest
 import simplejson
 
-from medea import app
 from medea.base import api_to_model_dict
 from medea.db_operations import session_scope
 
 @pytest.yield_fixture
 def test_client():
-    app.app.config['TESTING'] = True
+    from medea import app
     yield app.app.test_client()
-    app.app.config['TESTING'] = False
-
 
 class TestAPIBase(object):
     mock_work_request_object = {

@@ -130,7 +130,6 @@ def _update_roles_for_creator_from_dict(session, roles, creator):
                 updated_roles.append(new_role.id)
     session.query(Role).filter(~Role.id.in_(updated_roles)).delete(synchronize_session='fetch')
 
-
 def _update_creator_aliases(session, aliases, creator):
     updated_aliases = []
     for alias in aliases:
@@ -155,5 +154,4 @@ def _get_role_from_role_and_ids(session, role, creator_id, work_id):
     )\
     .first()
     return role_result
-
 

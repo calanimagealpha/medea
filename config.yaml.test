@@ -1,6 +1,6 @@
 port: 5000
-database: sqlite:///
+database: sqlite://
 debug: true
 
-validate_requests: false
-validate_responses: false
+validate_requests: true
+validate_responses: true
