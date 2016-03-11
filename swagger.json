@@ -272,6 +272,12 @@
                   "items": {
                     "$ref": "#/definitions/WorkPart"
                   }
+                },
+                "pieces": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Piece"
+                  }
                 }
               }
             }
@@ -634,6 +640,32 @@
         "description": {
           "type": "string",
           "description": "Long-form text description of this tag"
+        }
+      }
+    },
+    "Piece": {
+      "type": "object",
+      "required": [
+        "title",
+        "location",
+        "work"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The ID of this piece. If it has not been persisted to the database yet, this will not have a value."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the individual piece (eg: Papi Dance)"
+        },
+        "location": {
+          "type": "string",
+          "description": "A pointer to a location where someone can request for the piece"
+        },
+        "work": {
+          "type": "integer",
+          "description": "The ID of the work that the piece is associated with."
         }
       }
     }
