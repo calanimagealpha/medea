@@ -517,7 +517,7 @@
           },
           "description": "The IDs of the tags associated with this work"
         },
-        "tags": {
+        "pieces": {
           "type": "array",
           "items": {
             "type": "integer"
