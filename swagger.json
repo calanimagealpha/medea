@@ -517,6 +517,13 @@
           },
           "description": "The IDs of the tags associated with this work"
         },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "The IDs of the pieces associated with this work"
+        },
         "isActive": {
           "type": "boolean",
           "description": "True if this work is visible to the world. Assume this is true if it is not defined."
